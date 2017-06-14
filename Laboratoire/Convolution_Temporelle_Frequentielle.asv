@@ -1,0 +1,13 @@
+close all
+%% Variables
+nn = [2 1 -1];
+hn = [1 -1];
+
+%% a)
+hold on;
+scatter(0:1:2,xn);
+scatter(0:1:1,hn);
+
+convDirect = conv(Xn,hn);
+
+convIndirect = fft(Xn)
