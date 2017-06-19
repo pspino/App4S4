@@ -152,7 +152,9 @@ outlin1 = sin1 .*lin1;
 outlin2 = sin2 .*lin2;
 outlin3 = sin3 .*lin3;
 
-soundsc(outlin1,fe);
+% soundsc(outlin1,fe);
+% soundsc(outlin2,fe);
+% soundsc(outlin3,fe);
 
 % %Exemple de sortie graphique en supposant que les transformées de Fourier adéquates ont été calculées
 % figure;
