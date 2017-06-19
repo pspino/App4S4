@@ -11,19 +11,19 @@ df = fe/N;  %pas
 freq = -fe/2:df:(fe/2 - df);    %plage de freq.
 
 %% Sinus des sons
-
-figure;
-subplot(3, 1, 1)
-plot(s1,'r');
-subplot(3, 1, 2)
-plot(s2,'r');
-subplot(3, 1, 3)
-plot(s3,'r');
+% 
+% figure;
+% subplot(3, 1, 1)
+% plot(s1,'r');
+% subplot(3, 1, 2)
+% plot(s2,'r');
+% subplot(3, 1, 3)
+% plot(s3,'r');
 
 %% FFT
-amp1 = fft(s1,N);
-amp2 = fft(s2,N);
-amp3 = fft(s3,N);
+amp1 = fft(s1,fe);
+amp2 = fft(s2,fe);
+amp3 = fft(s3,fe);
 
 ang1 = angle(amp1);
 ang2 = angle(amp2);
@@ -34,9 +34,9 @@ amp1 = abs(amp1);
 amp2 = abs(amp2);
 amp3 = abs(amp3);
 
-[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.8,'MinPeakDistance', 190);
+[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.75,'MinPeakDistance', 120);
 [pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 3,'MinPeakDistance', 900);
-[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 2  ,'MinPeakDistance', 850);
+[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 3,'MinPeakDistance', 470);
 
 t = 0:1/fe:N/fe;
 
@@ -50,32 +50,32 @@ for i = 1:16
     sin3 = sin3 + (pks3(i)/N *2)*cos(2*pi*(freq3(i)-1)/N*fe*t + ang3(freq1(i)));
 end
 
-figure
-subplot(3,1,1);
-plot(amp1);
-subplot(3,1,2);
-plot(amp2);
-subplot(3,1,3);
-plot(amp3);
-
-figure
-subplot(3,1,1);
-plot(pks1);
-subplot(3,1,2);
-plot(pks2);
-subplot(3,1,3);
-plot(pks3);
-
-figure;
-subplot(3,1,1);
-plot(sin1);
-subplot(3,1,2);
-plot(sin2);
-subplot(3,1,3);
-plot(sin3);
+% figure
+% subplot(3,1,1);
+% plot(amp1);
+% subplot(3,1,2);
+% plot(amp2);
+% subplot(3,1,3);
+% plot(amp3);
+% 
+% figure
+% subplot(3,1,1);
+% plot(pks1);
+% subplot(3,1,2);
+% plot(pks2);
+% subplot(3,1,3);
+% plot(pks3);
+% 
+% figure;
+% subplot(3,1,1);
+% plot(sin1);
+% subplot(3,1,2);
+% plot(sin2);
+% subplot(3,1,3);
+% plot(sin3);
 
 %Filtre a moyenne mobile.
-L = 1000;
+L = 4000;
 h = ones(1,L)/L;
 
 abs1 = abs(s1);
@@ -86,26 +86,68 @@ env1 = conv(abs1,h);
 env2 = conv(abs2,h);
 env3 = conv(abs3,h);
 
-figure;
-subplot(3, 1, 1)
-plot(abs1,'r');
-hold on
-plot(env1);
+% figure;
+% subplot(3, 1, 1)
+% plot(abs1,'r');
+% hold on
+% plot(env1);
+% 
+% subplot(3, 1, 2)
+% plot(abs1,'r');
+% hold on
+% plot(env2);
+% 
+% subplot(3, 1, 3)
+% plot(abs1,'r');
+% hold on
+% plot(env3);
 
-subplot(3, 1, 2)
-plot(abs1,'r');
-hold on
-plot(env2);
+sample1 = [];
+sample2 = [];
+sample3 = [];
 
-subplot(3, 1, 3)
-plot(abs1,'r');
-hold on
-plot(env3);
+for i = 1:1000:length(env1)
+    sample1(end+1) = env1(i);
+    sample2(end+1) = env2(i);
+    sample3(end+1) = env3(i);
+end
+
+i = 1:1000:length(env1);
+k = 1:1:length(s1);
+%Lineaire
+lin1 = interp1(i,sample1,i);
+lin2 = interp1(i,sample2,i);
+lin3 = interp1(i,sample3,i);
+
+%Spline-Cubic
+splin1 = spline(i,sample1,k);
+splin2 = spline(i,sample2,k);
+splin3 = spline(i,sample3,k);
 
 figure
-preout1 = ones(1,env1) + ;
-out1 = sin1 * env1;
-plot(out1);
+subplot(3,1,1);
+plot(env1);
+hold on
+plot(i,lin1);
+hold on
+plot(k,splin1);
+
+subplot(3,1,2);
+plot(env2);
+hold on
+plot(i,sample2);
+hold on
+plot(k,splin2);
+
+subplot(3,1,3);
+plot(env3);
+hold on
+plot(i,sample3);
+hold on
+plot(k,splin3);
+hold off
+
+
 
 % %Exemple de sortie graphique en supposant que les transformées de Fourier adéquates ont été calculées
 % figure;
