@@ -8,6 +8,7 @@ xb = x+bruit;                       % ajout de bruit blanc
 L = 50;                             % longueur du filtre à moyenne mobile
 h = ones(1,L)/L;                    % filtre à moyenne mobile d’amplitude uniforme
 y = conv(xb, h);                    % convolution du signal avec le filtre
+
 figure
 subplot(3, 1, 1)
 plot(t,(abs(fft(x,1/Delta))))
@@ -16,6 +17,7 @@ plot(t,(abs(fft(xb,1/Delta))))
 subplot(3, 1, 3)
 h2 = [ones(1,L)/L, zeros(1,L-1/Delta)]; % Ajoute de zéros à la fin du filtre
 plot(t,(abs(fft(h2,1/Delta))))
+
 figure
 subplot(3, 1, 1)
 plot(t, x)
