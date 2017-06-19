@@ -115,9 +115,10 @@ end
 i = 1:1000:70000;
 k = 1:1:length(s1);
 %Lineaire
-lin1 = interp1(i,sample1,i);
-lin2 = interp1(i,sample2,i);
-lin3 = interp1(i,sample3,i);
+
+lin1 = interp1(i,sample1,k);
+lin2 = interp1(i,sample2,k);
+lin3 = interp1(i,sample3,k);
 
 %Spline-Cubic
 splin1 = spline(i,sample1,k);
@@ -128,21 +129,21 @@ figure
 subplot(3,1,1);
 plot(env1);
 hold on
-plot(i,lin1);
+plot(lin1);
 hold on
 plot(k,splin1);
 
 subplot(3,1,2);
 plot(env2);
 hold on
-plot(i,sample2);
+plot(lin2);
 hold on
 plot(k,splin2);
 
 subplot(3,1,3);
 plot(env3);
 hold on
-plot(i,sample3);
+plot(lin3);
 hold on
 plot(k,splin3);
 hold off
@@ -150,6 +151,8 @@ hold off
 outlin1 = sin1 .*lin1;
 outlin2 = sin2 .*lin2;
 outlin3 = sin3 .*lin3;
+
+soundsc(outlin1,fe);
 
 % %Exemple de sortie graphique en supposant que les transformées de Fourier adéquates ont été calculées
 % figure;
