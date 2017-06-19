@@ -43,17 +43,19 @@ ang1 = angle(amp1);
 ang2 = angle(amp2);
 ang3 = angle(amp3);
 
+% Remise en absolut.
 amp1 = abs(amp1);
 amp2 = abs(amp2);
 amp3 = abs(amp3);
 
-ampl_Max1 = max(amp1);
-ampl_Max2 = max(amp2);
-ampl_Max3 = max(amp3);
-
 pks1 = findpeaks(amp1, 'MinPeakProminence', 2.7,'MinPeakDistance', 250);
 pks2 = findpeaks(amp2, 'MinPeakProminence', 2.9,'MinPeakDistance', 900);
-pks3 = findpeaks(amp3, 'MinPeakProminence', 2,'MinPeakDistance', 850);
+pks3 = findpeaks(amp3, 'MinPeakProminence', 2  ,'MinPeakDistance', 850);
+
+syms t;
+for i = 1:32
+   %sin1 = sum(pks1(i)*cos(2*pi*F(i)*t + ang1(i)));
+end
 
 figure
 subplot(3,1,1);
