@@ -10,7 +10,7 @@ N = length(s1); %nb D'echantillons
 df = fe/N;  %pas
 freq = -fe/2:df:(fe/2 - df);    %plage de freq.
 
-%% Filtre a moyenne mobile.
+% Filtre a moyenne mobile.
 % L = 44100;
 % h = ones(1,L)/L;
 % 
@@ -48,14 +48,26 @@ amp1 = abs(amp1);
 amp2 = abs(amp2);
 amp3 = abs(amp3);
 
-pks1 = findpeaks(amp1, 'MinPeakProminence', 2.7,'MinPeakDistance', 250);
-pks2 = findpeaks(amp2, 'MinPeakProminence', 2.9,'MinPeakDistance', 900);
-pks3 = findpeaks(amp3, 'MinPeakProminence', 2  ,'MinPeakDistance', 850);
+[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.8,'MinPeakDistance', 190);
+[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 3,'MinPeakDistance', 900);
+[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 2  ,'MinPeakDistance', 850);
 
-syms t;
-for i = 1:32
-   %sin1 = sum(pks1(i)*cos(2*pi*F(i)*t + ang1(i)));
+t = 0:1/fe:N/fe;
+sin1 = 0;
+
+for i = 1:16
+    sin1 = sin1 + (pks1(i)/N *2)*cos(2*pi*(freq1(i)-1)/N*fe*t + ang1(freq1(i)));
+    sin2 = sin1 + (pks2(i)/N *2)*cos(2*pi*(freq2(i)-1)/N*fe*t + ang2(freq1(i)));
+    sin3 = sin1 + (pks3(i)/N *2)*cos(2*pi*(freq3(i)-1)/N*fe*t + ang3(freq1(i)));
 end
+
+figure
+subplot(3,1,1);
+plot(amp1);
+subplot(3,1,2);
+plot(amp2);
+subplot(3,1,3);
+plot(amp3);
 
 figure
 subplot(3,1,1);
@@ -64,6 +76,14 @@ subplot(3,1,2);
 plot(pks2);
 subplot(3,1,3);
 plot(pks3);
+
+figure;
+subplot(3,1,1);
+plot(sin1);
+subplot(3,1,2);
+plot(sin2);
+subplot(3,1,3);
+plot(sin3);
 
 % %Exemple de sortie graphique en supposant que les transformées de Fourier adéquates ont été calculées
 % figure;
@@ -88,9 +108,7 @@ plot(pks3);
 % Écoute des fichiers (supporté seulement sous windows: wavplay)
 % Il est possible d'utiliser soundsc (independant de tous les systemes
 %  d'exploitation)
-% soundsc(s1, fe);
-% soundsc(s2, fe);
-% soundsc(s3, fe);
+% soundsc(sin1, fe);
 % [s1, fe, NBITS] = wavread('son1');
 % [s2, fe, NBITS] = wavread('son2');
 % [s3, fe, NBITS] = wavread('son3');
