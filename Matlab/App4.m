@@ -35,19 +35,25 @@ hold on
 %plot(env3);
 
 %% FFT
-res1 = abs(fft(s1,N));
-res2 = abs(fft(s2,N));
-res3 = abs(fft(s3,N));
+amp1 = fft(s1,N);
+amp2 = fft(s2,N);
+amp3 = fft(s3,N);
 
-ampl_Max1 = max(res1);
-ampl_Max2 = max(res2);
-ampl_Max3 = max(res3);
+ang1 = angle(amp1);
+ang2 = angle(amp2);
+ang3 = angle(amp3);
 
-pks1 = findpeaks(res1, 'MinPeakProminence', 2.7,'MinPeakDistance', 250);
-pks2 = findpeaks(res2, 'MinPeakProminence', 2.9,'MinPeakDistance', 900);
-pks3 = findpeaks(res3, 'MinPeakProminence', 2,'MinPeakDistance', 850);
+amp1 = abs(amp1);
+amp2 = abs(amp2);
+amp3 = abs(amp3);
 
+ampl_Max1 = max(amp1);
+ampl_Max2 = max(amp2);
+ampl_Max3 = max(amp3);
 
+pks1 = findpeaks(amp1, 'MinPeakProminence', 2.7,'MinPeakDistance', 250);
+pks2 = findpeaks(amp2, 'MinPeakProminence', 2.9,'MinPeakDistance', 900);
+pks3 = findpeaks(amp3, 'MinPeakProminence', 2,'MinPeakDistance', 850);
 
 figure
 subplot(3,1,1);
