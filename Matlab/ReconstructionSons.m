@@ -75,7 +75,7 @@ end
 % plot(sin3);
 
 %Filtre a moyenne mobile.
-L = 4000;
+L = 3000;
 h = ones(1,L)/L;
 
 abs1 = abs(s1);
@@ -114,8 +114,8 @@ end
 
 i = 1:1000:70000;
 k = 1:1:length(s1);
-%Lineaire
 
+%Lineaire
 lin1 = interp1(i,sample1,k);
 lin2 = interp1(i,sample2,k);
 lin3 = interp1(i,sample3,k);
@@ -152,30 +152,13 @@ outlin1 = sin1 .*lin1;
 outlin2 = sin2 .*lin2;
 outlin3 = sin3 .*lin3;
 
-% %Exemple de sortie graphique en supposant que les transformées de Fourier adéquates ont été calculées
-% figure;
-% subplot(3, 1, 1)
-% plot(abs(freq), res1); % TransforméeDeS1 n'existe pas, il faut la trouver dans le cadre de cette unité
-% xlabel('f (Hz)')
-% ylabel('Amplitude (V)')
-% title('Spectre du son 1')
-% 
-% subplot(3, 1, 2)
-% plot(abs(freq),  res2) % TransforméeDeS2 n'existe pas, il faut la trouver dans le cadre de cette unité
-% xlabel('f (Hz)')
-% ylabel('Amplitude (V)')
-% title('Spectre du son 2')
-% 
-% subplot(3, 1, 3)
-% plot(abs(freq),  res3) % TransforméeDeS3 n'existe pas, il faut la trouver dans le cadre de cette unité
-% xlabel('f (Hz)')
-% ylabel('Amplitude (V)')
-% title('Spectre du son 3')
+audiowrite('SonsReconstruit\reconstruit1.wav',outlin1,fe);
+audiowrite('SonsReconstruit\reconstruit2.wav',outlin2,fe);
+audiowrite('SonsReconstruit\reconstruit3.wav',outlin3,fe);
 
-% Écoute des fichiers (supporté seulement sous windows: wavplay)
-% Il est possible d'utiliser soundsc (independant de tous les systemes
-%  d'exploitation)
-% soundsc(sin1, fe);
-% [s1, fe, NBITS] = wavread('son1');
-% [s2, fe, NBITS] = wavread('son2');
-% [s3, fe, NBITS] = wavread('son3');
+%  soundsc(outlin1,fe);
+%  soundsc(s1,fe);
+%  soundsc(outlin2,fe);
+%  soundsc(s2,fe);
+%  soundsc(outlin3,fe);
+%  soundsc(s3,fe);
