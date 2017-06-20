@@ -1,5 +1,5 @@
 close all;
-
+grid on;
 %% ouverture des sons
 [s1, fe] = audioread('SonsACompresser\son1.wav');
 [s2, fe] = audioread('SonsACompresser\son2.wav');
@@ -56,26 +56,53 @@ end
 figure
 subplot(3,1,1);
 plot(amp1);
+title('Module du son1 sur les frequences');
+xlabel('Frequence (Hz)');
+ylabel('Module');
 subplot(3,1,2);
 plot(amp2);
+title('Module du son2 sur les frequences');
+xlabel('Frequence (Hz)');
+ylabel('Module');
 subplot(3,1,3);
 plot(amp3);
+title('Module du son3 sur les frequences');
+xlabel('Frequence (Hz)');
+ylabel('Module');
 
 figure
 subplot(3,1,1);
-scatter(freq1,pks1);
+bar(freq1,pks1,0.05,'r');
+title('Figure des pics selectionnes du module du son1');
+xlabel('Frequences (Hz)');
+ylabel('Module');
 subplot(3,1,2);
-scatter(freq2,pks2);
+bar(freq2,pks2,0.05,'r');
+title('Figure des pics selectionnes du module du son2');
+xlabel('Frequences (Hz)');
+ylabel('Module');
 subplot(3,1,3);
-scatter(freq3,pks3);
+bar(freq3,pks3,0.05,'r');
+title('Figure des pics selectionnes du module du son3');
+xlabel('Frequences (Hz)');
+ylabel('Module');
 
 figure;
 subplot(3,1,1);
 plot(sin1);
+title('Cosinus reconstruit appartir des parametre du son1');
+xlabel('Echantillion');
+ylabel('Amplitude');
 subplot(3,1,2);
 plot(sin2);
+title('Cosinus reconstruit appartir des parametre du son2');
+xlabel('Echantillion');
+ylabel('Amplitude');
 subplot(3,1,3);
 plot(sin3);
+title('Cosinus reconstruit appartir des parametre du son3');
+xlabel('Echantillion');
+ylabel('Amplitude');
 
 %Filtre a moyenne mobile.
 L = 5000;
@@ -94,16 +121,23 @@ subplot(3, 1, 1)
 plot(abs1,'r');
 hold on
 plot(env1);
-
+title('Signal du son1 redresse avec l''enveloppe convolue');
+xlabel('Echantillion');
+ylabel('Amplitude');
 subplot(3, 1, 2)
 plot(abs1,'r');
 hold on
 plot(env2);
-
+title('Signal du son2 redresse avec l''enveloppe convolue');
+xlabel('Echantillion');
+ylabel('Amplitude');
 subplot(3, 1, 3)
 plot(abs1,'r');
 hold on
 plot(env3);
+title('Signal du son3 redresse avec l''enveloppe convolue');
+xlabel('Echantillion');
+ylabel('Amplitude');
 
 sample1 = [];
 sample2 = [];
@@ -135,6 +169,10 @@ hold on
 plot(lin1);
 hold on
 plot(k,splin1);
+title('Enveloppe Convolue, interpole lineairement et interpole Spline-Cubic  du son1')
+xlabel('Echantillon')
+ylabel('Amplitude')
+legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 
 subplot(3,1,2);
 plot(env2);
@@ -142,6 +180,10 @@ hold on
 plot(lin2);
 hold on
 plot(k,splin2);
+title('Enveloppe Convolue, interpole lineairement et interpole Spline-Cubic  du son2')
+xlabel('Echantillon')
+ylabel('Amplitude')
+legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 
 subplot(3,1,3);
 plot(env3);
@@ -149,6 +191,10 @@ hold on
 plot(lin3);
 hold on
 plot(k,splin3);
+title('Enveloppe Convolue, interpole lineairement et interpole Spline-Cubic du son3')
+xlabel('Echantillon')
+ylabel('Amplitude')
+legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 hold off
 
 outlin1 = sin1 .*lin1;
@@ -158,14 +204,27 @@ outlin3 = sin3 .*lin3;
 figure 
 subplot(3,1,1)
 plot(outlin1)
+title('Son1 reconstitue');
+xlabel('Echantillon');
+ylabel('Amplitude');
 subplot(3,1,2)
 plot(outlin2)
+title('Son2 reconstitue');
+xlabel('Echantillon');
+ylabel('Amplitude');
 subplot(3,1,3)
 plot(outlin3)
+title('Son3 reconstitue');
+xlabel('Echantillon');
+ylabel('Amplitude');
 
 audiowrite('SonsReconstruit\reconstruit1.wav',outlin1,fe);
 audiowrite('SonsReconstruit\reconstruit2.wav',outlin2,fe);
 audiowrite('SonsReconstruit\reconstruit3.wav',outlin3,fe);
+
+filename = 'newson2Spline.wav';
+newson2Spline = newson2Spline./(max(abs(newson2Spline)));
+audiowrite(filename,newson2Spline,fe)
 
 %  soundsc(outlin1,fe);
 %  pause(2)
