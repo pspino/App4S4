@@ -198,8 +198,8 @@ legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 hold off
 
 outlin1 = sin1 .*lin1;
-outlin2 = sin2 .*splin2;
-outlin3 = sin3 .*splin3;
+outlin2 = sin2 .*lin2;
+outlin3 = sin3 .*lin3;
 
 figure 
 subplot(3,1,1)
@@ -218,18 +218,13 @@ title('Son3 reconstitue');
 xlabel('Echantillon');
 ylabel('Amplitude');
 
+audiowrite('SonsReconstruit\reconstruit1.wav',outlin1,fe);
+audiowrite('SonsReconstruit\reconstruit2.wav',outlin2,fe);
+audiowrite('SonsReconstruit\reconstruit3.wav',outlin3,fe);
 
-filename = 'SonsReconstruit\reconstruit1.wav';
-outlin1 = outlin1./(max(abs(outlin1)));
-audiowrite(filename,outlin1,fe)
-
-filename = 'SonsReconstruit\reconstruit2.wav';
-outlin2 = outlin2./(max(abs(outlin2)));
-audiowrite(filename,outlin2,fe)
-
-filename = 'SonsReconstruit\reconstruit3.wav';
-outlin3 = outlin3./(max(abs(outlin3)));
-audiowrite(filename,outlin3,fe)
+filename = 'reconstruit1.wav';
+newson2Spline = newson2Spline./(max(abs(newson2Spline)));
+audiowrite(filename,newson2Spline,fe)
 
 %  soundsc(outlin1,fe);
 %  pause(2)
@@ -240,7 +235,7 @@ audiowrite(filename,outlin3,fe)
 % soundsc(s2,fe);
 % pause(2)
 
-% soundsc(outlin3,fe);
+%  soundsc(outlin3,fe);
 % pause(2)
-% soundsc(s3,fe);
+%  soundsc(s3,fe);
 
