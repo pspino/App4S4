@@ -1,5 +1,6 @@
 close all;
-
+clear all;
+clc;
 %% correlation
 [t1, f1] = audioread('TramesAReconnaitre\trame1.wav');
 [t2, f2] = audioread('TramesAReconnaitre\trame2.wav');

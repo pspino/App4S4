@@ -63,11 +63,11 @@ plot(amp3);
 
 figure
 subplot(3,1,1);
-scatter(freq1,pks1);
+plot(pks1);
 subplot(3,1,2);
-scatter(freq2,pks2);
+plot(pks2);
 subplot(3,1,3);
-scatter(freq3,pks3);
+plot(pks3);
 
 figure;
 subplot(3,1,1);
@@ -78,7 +78,7 @@ subplot(3,1,3);
 plot(sin3);
 
 %Filtre a moyenne mobile.
-L = 5000;
+L = 1000;
 h = ones(1,L)/L;
 
 abs1 = abs(s1);
@@ -155,28 +155,16 @@ outlin1 = sin1 .*lin1;
 outlin2 = sin2 .*lin2;
 outlin3 = sin3 .*lin3;
 
-figure 
-subplot(3,1,1)
-plot(outlin1)
-subplot(3,1,2)
-plot(outlin2)
-subplot(3,1,3)
-plot(outlin3)
-
 audiowrite('SonsReconstruit\reconstruit1.wav',outlin1,fe);
 audiowrite('SonsReconstruit\reconstruit2.wav',outlin2,fe);
 audiowrite('SonsReconstruit\reconstruit3.wav',outlin3,fe);
 
-%  soundsc(outlin1,fe);
-%  pause(2)
+  %soundsc(outlin1,fe);
 %  soundsc(s1,fe);
-
-% soundsc(outlin2,fe);
-% pause(2)
-% soundsc(s2,fe);
-% pause(2)
+soundsc(outlin2,fe);
+pause(2)
+soundsc(s2,fe);
+pause(2)
 
 %  soundsc(outlin3,fe);
-% pause(2)
 %  soundsc(s3,fe);
-
