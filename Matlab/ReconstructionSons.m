@@ -1,5 +1,5 @@
 close all;
-grid on;
+clc
 %% ouverture des sons
 [s1, fe] = audioread('SonsACompresser\son1.wav');
 [s2, fe] = audioread('SonsACompresser\son2.wav');
@@ -35,10 +35,8 @@ amp2 = abs(amp2);
 amp3 = abs(amp3);
 
 [pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.75,'MinPeakDistance', 120);
-[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 3,'MinPeakDistance', 900);
-[pks2test, freq2test] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 1,'MinPeakDistance', 700);
-
-[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 3,'MinPeakDistance', 470);
+[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 2.80,'MinPeakDistance', 440);
+[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 3.50,'MinPeakDistance', 470);
 
 t = 0:1/fe:((N/fe)-(1/fe));
 
@@ -48,10 +46,15 @@ sin2test =0;
 sin3 = 0;
 
 for i = 1:16
-    sin1 = sin1 + (pks1(i)/N *2)*cos(2*pi*(freq1(i)-1)/N*fe*t + ang1(freq1(i)));
-    sin2 = sin2 + (pks2(i)/N *2)*cos(2*pi*(freq2(i)-1)/N*fe*t + ang2(freq2(i)));
-    sin3 = sin3 + (pks3(i)/N *2)*cos(2*pi*(freq3(i)-1)/N*fe*t + ang3(freq3(i)));
+    sin1 = sin1 + (pks1(i)/N *2)*cos(2*pi*(freq1(i)-1)*t + ang1(freq1(i)));
 end
+for i = 1:32
+    sin2 = sin2 + (pks2(i)/N *2)*cos(2*pi*(freq2(i)-1)*t + ang2(freq2(i)));
+end
+for i = 1:16
+    sin3 = sin3 + (pks3(i)/N *2)*cos(2*pi*(freq3(i)-1)*t + ang3(freq3(i)));
+end
+
 
 figure
 subplot(3,1,1);
@@ -72,17 +75,17 @@ ylabel('Module');
 
 figure
 subplot(3,1,1);
-bar(freq1,pks1,0.05,'r');
+stem(freq1,pks1,'filled','MarkerSize',3);
 title('Figure des pics selectionnes du module du son1');
 xlabel('Frequences (Hz)');
 ylabel('Module');
 subplot(3,1,2);
-bar(freq2,pks2,0.05,'r');
+stem(freq2,pks2,'filled','MarkerSize',3);
 title('Figure des pics selectionnes du module du son2');
 xlabel('Frequences (Hz)');
 ylabel('Module');
 subplot(3,1,3);
-bar(freq3,pks3,0.05,'r');
+stem(freq3,pks3,'filled','MarkerSize',3);
 title('Figure des pics selectionnes du module du son3');
 xlabel('Frequences (Hz)');
 ylabel('Module');
@@ -197,9 +200,9 @@ ylabel('Amplitude')
 legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 hold off
 
-outlin1 = sin1 .*lin1;
-outlin2 = sin2 .*splin2;
-outlin3 = sin3 .*splin3;
+outlin1 = sin1 .* lin1;
+outlin2 = sin2 .* splin2;
+outlin3 = sin3 .* splin3;
 
 figure 
 subplot(3,1,1)
@@ -231,14 +234,19 @@ filename = 'SonsReconstruit\reconstruit3.wav';
 outlin3 = outlin3./(max(abs(outlin3)));
 audiowrite(filename,outlin3,fe)
 
-%  soundsc(outlin1,fe);
-%  pause(2)
-%  soundsc(s1,fe);
+audiowrite('SonCompresser\compress1.wav',sample1,fe);
+audiowrite('SonCompresser\compress2.wav',sample2,fe);
+audiowrite('SonCompresser\compress3.wav',sample3,fe);
+% 
+% soundsc(outlin1,fe);
+% pause(2)
+% soundsc(s1,fe);
+% pause(2)
 
-% soundsc(outlin2,fe);
-% pause(2)
-% soundsc(s2,fe);
-% pause(2)
+soundsc(outlin2,fe);
+pause(2)
+soundsc(s2,fe);
+pause(2)
 
 % soundsc(outlin3,fe);
 % pause(2)

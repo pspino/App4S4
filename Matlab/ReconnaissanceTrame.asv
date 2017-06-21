@@ -13,28 +13,75 @@ clc;
 %% correlation normalise de tous les son sur les trame
 
 L1 = length(t1);
+L2 = length(s1);
 k1 = - (L1-1) : (L1-1);
 
-for i = 1:L1
 
-C1     = xcorr(t1,s1);
-C12    = xcorr(t1,s2);
-C13    = xcorr(t1,s3);
+q1 = zeros([length(t1),1]);
+q2 = zeros([length(t2),1]);
+q3 = zeros([length(t3),1]);
+
+for i = 1:length(s1)
+    k=i+140e3;
+    q1(k) = s1(i);
+    q2(k) = s2(i);
+    q3(k) = s3(i);
+end
+
+C11    = xcorr(t1,q1,'unbiased');
+C12    = xcorr(t1,q2,'unbiased');
+C13    = xcorr(t1,q3,'unbiased');
+
+C21    = xcorr(t2,q1,'unbiased');
+C22    = xcorr(t2,q2,'unbiased');
+C23    = xcorr(t2,q3,'unbiased');
+
+C31    = xcorr(t2,q1,'unbiased');
+C32    = xcorr(t2,q2,'unbiased');
+C33    = xcorr(t2,q3,'unbiased');
+
+
+subplot(3,2,1)
+hold on;
+plot(k1,C11);
+plot(k1,C12);
+plot(k1,C13);
+title('Fonction de correlation normalise entre la trame 1 et les sons donné non compressé*')
+xlabel('Decalage k')
+hold off;
+
+subplot(3,2,3)
+hold on;
+plot(k1,C21);
+plot(k1,C22);
+plot(k1,C23);
+title('Fonction de correlation normalise entre la trame 2 et les sons donné non compressé*')
+xlabel('Decalage k')
+hold off;
+
+subplot(3,2,5)
+hold on;
+plot(k1,C31);
+plot(k1,C32);
+plot(k1,C33);
+title('Fonction de correlation normalise entre la trame 3 et les sons donné non compressé*')
+xlabel('Decalage k')
+hold off;
 
 %% correlation croisee de tous les son sur les trame
-xC1     = xcorr(t1,s1);
+xC11     = xcorr(t1,s1);
 xC12    = xcorr(t1,s2);
 xC13    = xcorr(t1,s3);
 L1 = length(t1);
 k1 = - (L1-1) : (L1-1);
 
-% subplot(6,1,4);
+% subplot(3,1,4);
 % plot(t1) 
 % title('trame 1');
-% subplot(6,1,5);
+% subplot(3,1,5);
 % plot(t2) 
 % title('trame 2');
-% subplot(6,1,6);
+% subplot(3,1,6);
 % plot(t3) 
 % title('trame 3');
 
@@ -42,10 +89,9 @@ ht1 = ones(1,L1)/L1;
 abst1 = abs(t1);
 envt1 = conv(abst1,ht1);
 
-figure(3);
-subplot(3,1,1)
+subplot(3,2,2)
 hold on;
-plot(k1,xC1);
+plot(k1,xC11);
 plot(k1,xC12);
 plot(k1,xC13);
 hold off;
@@ -53,14 +99,14 @@ title('Fonction de correlation croisee entre la trame 1 et les sons donné non co
 xlabel('Decalage k')
 
 %trame 2
-xC1 = xcorr(t2,s1);
+xC11 = xcorr(t2,s1);
 xC12= xcorr(t2,s2);
 xC13= xcorr(t2,s3);
 L1 = length(t2);
 k1 = - (L1-1) : (L1-1);
-subplot(3,1,2)
+subplot(3,2,4)
 hold on;
-plot(k1,xC1);
+plot(k1,xC11);
 plot(k1,xC12);
 plot(k1,xC13);
 hold off;
@@ -68,16 +114,24 @@ title('Fonction de correlation croisee entre la trame 2 et les sons donné non co
 xlabel('Decalage k')
 
 %trame 2
-xC1 = xcorr(t3,s1);
+xC11 = xcorr(t3,s1);
 xC12= xcorr(t3,s2);
 xC13= xcorr(t3,s3);
 L1 = length(t3);
 k1 = - (L1-1) : (L1-1);
-subplot(3,1,3)
+subplot(3,2,6)
 hold on;
-plot(k1,xC1);
+plot(k1,xC11);
 plot(k1,xC12);
 plot(k1,xC13);
 hold off;
 title('Fonction de correlation croisee entre la trame 3 et les sons donné non compressé*')
 xlabel('Decalage k')
+
+% figure
+% autocorr(s1);
+thres = 0.06;   
+
+for i = 1:length(q1)
+    if(thres < q1(i))
+        disp('trame 1 detecter')
