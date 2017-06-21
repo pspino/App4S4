@@ -34,9 +34,9 @@ amp1 = abs(amp1);
 amp2 = abs(amp2);
 amp3 = abs(amp3);
 
-[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.75,'MinPeakDistance', 120);
-[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 2.80,'MinPeakDistance', 440);
-[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 3.50,'MinPeakDistance', 470);
+[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.75, 'MinPeakDistance', 120);
+[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 2.80, 'MinPeakDistance', 440);
+[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 2.50, 'MinPeakDistance', 220);
 
 t = 0:1/fe:((N/fe)-(1/fe));
 
@@ -45,13 +45,13 @@ sin2 = 0;
 sin2test =0;
 sin3 = 0;
 
-for i = 1:16
+for i = 1:length(pks1)      %16 pts
     sin1 = sin1 + (pks1(i)/N *2)*cos(2*pi*(freq1(i)-1)*t + ang1(freq1(i)));
 end
-for i = 1:32
+for i = 1:length(pks2)      %32 pts
     sin2 = sin2 + (pks2(i)/N *2)*cos(2*pi*(freq2(i)-1)*t + ang2(freq2(i)));
 end
-for i = 1:16
+for i = 1:length(pks3)      %29 pts
     sin3 = sin3 + (pks3(i)/N *2)*cos(2*pi*(freq3(i)-1)*t + ang3(freq3(i)));
 end
 
@@ -108,16 +108,20 @@ xlabel('Echantillion');
 ylabel('Amplitude');
 
 %Filtre a moyenne mobile.
-L = 5000;
-h = ones(1,L)/L;
+L1 = 5000;
+h1 = ones(1,L1)/L1;
+L2 = 1500;
+h2 = ones(1,L2)/L2;
+L3 = 2500;
+h3 = ones(1,L3)/L3;
 
 abs1 = abs(s1);
 abs2 = abs(s2);
 abs3 = abs(s3);
 
-env1 = conv(abs1,h);
-env2 = conv(abs2,h);
-env3 = conv(abs3,h);
+env1 = conv(abs1,h1);
+env2 = conv(abs2,h2);
+env3 = conv(abs3,h3);
 
 figure;
 subplot(3, 1, 1)
@@ -243,12 +247,12 @@ audiowrite('SonCompresser\compress3.wav',sample3,fe);
 % soundsc(s1,fe);
 % pause(2)
 
-soundsc(outlin2,fe);
-pause(2)
-soundsc(s2,fe);
-pause(2)
-
-% soundsc(outlin3,fe);
+% soundsc(outlin2,fe);
 % pause(2)
-% soundsc(s3,fe);
+% soundsc(s2,fe);
+% pause(2)
+
+soundsc(outlin3,fe);
+pause(2)
+soundsc(s3,fe);
 

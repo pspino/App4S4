@@ -133,37 +133,90 @@ xlabel('Decalage k')
 % figure
 % autocorr(s1);
 
-thres = 0.02;   
+%Son1
+thres = 0.006;
 for i = 1:length(C11)
     if(thres < C11(i))
-        disp('trame 1 detecter')
+        disp('Son1 trouve dans la trame1!');
+        break;
     end
-    if(thres < C12(i))
-        disp('trame 2 detecter')
-    end
-    if(thres < C13(i))
-        disp('trame 3 detecter')
-    end
+end
+if (i == length(C11))
+    disp('Son1 n''a pas ete trouve dans la trame1');
 end
 for i = 1:length(C21)
-    if(thres < C11(i))
-        disp('trame 1 detecter')
-    end
-    if(thres < C12(i))
-        disp('trame 2 detecter')
-    end
-    if(thres < C13(i))
-        disp('trame 3 detecter')
+    if(thres < C21(i))
+        disp('Son1 trouve dans la trame2!');
+        break;
     end
 end
+if (i == length(C21))
+    disp('Son1 n''a pas ete trouve dans la trame2');
+end
 for i = 1:length(C31)
-    if(thres < C11(i))
-        disp('trame 1 detecter')
+    if(thres < C31(i))
+        disp('Son1 trouve dans la trame3!');
+        break;
     end
+end
+if (i == length(C31))
+    disp('Son1 n''a pas ete trouve dans la trame3');
+end
+
+%son2
+for i = 1:length(C12)
     if(thres < C12(i))
-        disp('trame 2 detecter')
+        disp('Son2 trouve dans la trame1!');
+        break;
     end
+end
+if (i == length(C12))
+    disp('Son2 n''a pas ete trouve dans la trame1');
+end
+for i = 1:length(C22)
+    if(thres < C22(i))
+        disp('Son2 trouve dans la trame2!');
+        break;
+    end
+end
+if (i == length(C22))
+    disp('Son2 n''a pas ete trouve dans la trame2');
+end
+for i = 1:length(C32)
+    if(thres < C32(i))
+        disp('Son2 trouve dans la trame3!');
+        break;
+    end
+end
+if (i == length(C32))
+    disp('Son2 n''a pas ete trouve dans la trame3');
+end
+ 
+%son3
+for i = 1:length(C13)
     if(thres < C13(i))
-        disp('trame 3 detecter')
+        disp('Son3 trouve dans la trame1!');
+        break;
     end
+end
+if (i == length(C13))
+    disp('Son3 n''a pas ete trouve dans la trame1');
+end
+for i = 1:length(C23)
+    if(thres < C23(i))
+        disp('Son3 trouve dans la trame2!');
+        break;
+    end
+end
+if (i == length(C23))
+    disp('Son3 n''a pas ete trouve dans la trame2');
+end
+for i = 1:length(C33)
+    if(thres < C33(i))
+        disp('Son3 trouve dans la trame3!');
+        break;
+    end
+end
+if (i == length(C33))
+    disp('Son3 n''a pas ete trouve dans la trame3');
 end
