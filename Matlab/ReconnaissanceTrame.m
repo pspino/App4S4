@@ -14,7 +14,7 @@ clc;
 
 L1 = length(t1);
 L2 = length(s1);
-k1 = - (L1-1) : (L1-1);
+k1 = -(L1-1) : (L1-1);
 
 
 q1 = zeros([length(t1),1]);
@@ -100,8 +100,8 @@ xlabel('Decalage k')
 
 %trame 2
 xC11 = xcorr(t2,s1);
-xC12= xcorr(t2,s2);
-xC13= xcorr(t2,s3);
+xC12 = xcorr(t2,s2);
+xC13 = xcorr(t2,s3);
 L1 = length(t2);
 k1 = - (L1-1) : (L1-1);
 subplot(3,2,4)
@@ -115,8 +115,8 @@ xlabel('Decalage k')
 
 %trame 2
 xC11 = xcorr(t3,s1);
-xC12= xcorr(t3,s2);
-xC13= xcorr(t3,s3);
+xC12 = xcorr(t3,s2);
+xC13 = xcorr(t3,s3);
 L1 = length(t3);
 k1 = - (L1-1) : (L1-1);
 subplot(3,2,6)
@@ -134,7 +134,7 @@ xlabel('Decalage k')
 % autocorr(s1);
 
 %Son1
-thres = 0.006;
+thres = 0.0061;
 for i = 1:length(C11)
     if(thres < C11(i))
         disp('Son1 trouve dans la trame1!');

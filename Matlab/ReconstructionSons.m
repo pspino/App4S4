@@ -1,4 +1,5 @@
 close all;
+clear all;
 clc
 %% ouverture des sons
 [s1, fe] = audioread('SonsACompresser\son1.wav');
@@ -29,6 +30,7 @@ ang1 = angle(amp1);
 ang2 = angle(amp2);
 ang3 = angle(amp3);
 
+
 % Remise en absolut.
 amp1 = abs(amp1);
 amp2 = abs(amp2);
@@ -42,7 +44,6 @@ t = 0:1/fe:((N/fe)-(1/fe));
 
 sin1 = 0;
 sin2 = 0;
-sin2test =0;
 sin3 = 0;
 
 for i = 1:length(pks1)      %16 pts
@@ -107,7 +108,7 @@ title('Cosinus reconstruit appartir des parametre du son3');
 xlabel('Echantillion');
 ylabel('Amplitude');
 
-%Filtre a moyenne mobile.
+%Filtres a moyenne mobile.
 L1 = 5000;
 h1 = ones(1,L1)/L1;
 L2 = 1500;
@@ -204,6 +205,39 @@ ylabel('Amplitude')
 legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 hold off
 
+%% RMS
+%Linear
+E1 = 0;
+E2 = 0;
+E3 = 0;
+for i = 1:length(lin1)
+    if lin1(i) ~= NaN
+        break;
+    end
+    E1 = E1 + (lin1(i) - env1(i)).^2; 
+    E2 = E2 + (lin2(i) - env2(i)).^2; 
+    E3 = E3 + (lin3(i) - env3(i)).^2; 
+end
+
+rmsL1 = sqrt(1/70000 *E1)
+rmsL2 = sqrt(1/70000 *E2)
+rmsL3 = sqrt(1/70000 *E3)
+
+%Spline
+X1 = 0;
+X2 = 0;
+X3 = 0;
+for i = 1:length(lin1)
+    X1 = splin1(i) - env1(i); 
+    X2 = splin2(i) - env2(i);
+    X3 = splin3(i) - env3(i); 
+end
+
+rmsSpl1 = rms(X1)
+rmsSpl2 = rms(X2)
+rmsSpl3 = rms(X3)
+
+%% Reconstruction
 outlin1 = sin1 .* lin1;
 outlin2 = sin2 .* splin2;
 outlin3 = sin3 .* splin3;
@@ -225,7 +259,7 @@ title('Son3 reconstitue');
 xlabel('Echantillon');
 ylabel('Amplitude');
 
-
+%% Output
 filename = 'SonsReconstruit\reconstruit1.wav';
 outlin1 = outlin1./(max(abs(outlin1)));
 audiowrite(filename,outlin1,fe)
@@ -241,7 +275,7 @@ audiowrite(filename,outlin3,fe)
 audiowrite('SonCompresser\compress1.wav',sample1,fe);
 audiowrite('SonCompresser\compress2.wav',sample2,fe);
 audiowrite('SonCompresser\compress3.wav',sample3,fe);
-% 
+
 % soundsc(outlin1,fe);
 % pause(2)
 % soundsc(s1,fe);
@@ -252,7 +286,7 @@ audiowrite('SonCompresser\compress3.wav',sample3,fe);
 % soundsc(s2,fe);
 % pause(2)
 
-soundsc(outlin3,fe);
-pause(2)
-soundsc(s3,fe);
+% soundsc(outlin3,fe);
+% pause(2)
+% soundsc(s3,fe);
 

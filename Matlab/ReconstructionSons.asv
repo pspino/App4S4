@@ -1,4 +1,5 @@
 close all;
+clear all;
 clc
 %% ouverture des sons
 [s1, fe] = audioread('SonsACompresser\son1.wav');
@@ -29,27 +30,32 @@ ang1 = angle(amp1);
 ang2 = angle(amp2);
 ang3 = angle(amp3);
 
+
 % Remise en absolut.
 amp1 = abs(amp1);
 amp2 = abs(amp2);
 amp3 = abs(amp3);
 
-[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.75,'MinPeakDistance', 120);
-[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 3,'MinPeakDistance', 900);
-[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 3.5,'MinPeakDistance', 470);
+[pks1, freq1] = findpeaks(amp1(1:end/2), 'MinPeakProminence', 2.75, 'MinPeakDistance', 120);
+[pks2, freq2] = findpeaks(amp2(1:end/2), 'MinPeakProminence', 2.80, 'MinPeakDistance', 440);
+[pks3, freq3] = findpeaks(amp3(1:end/2), 'MinPeakProminence', 2.50, 'MinPeakDistance', 220);
 
 t = 0:1/fe:((N/fe)-(1/fe));
 
 sin1 = 0;
 sin2 = 0;
-sin2test =0;
 sin3 = 0;
 
-for i = 1:1
+for i = 1:length(pks1)      %16 pts
     sin1 = sin1 + (pks1(i)/N *2)*cos(2*pi*(freq1(i)-1)*t + ang1(freq1(i)));
+end
+for i = 1:length(pks2)      %32 pts
     sin2 = sin2 + (pks2(i)/N *2)*cos(2*pi*(freq2(i)-1)*t + ang2(freq2(i)));
+end
+for i = 1:length(pks3)      %29 pts
     sin3 = sin3 + (pks3(i)/N *2)*cos(2*pi*(freq3(i)-1)*t + ang3(freq3(i)));
 end
+
 
 figure
 subplot(3,1,1);
@@ -102,17 +108,21 @@ title('Cosinus reconstruit appartir des parametre du son3');
 xlabel('Echantillion');
 ylabel('Amplitude');
 
-%Filtre a moyenne mobile.
-L = 5000;
-h = ones(1,L)/L;
+%Filtres a moyenne mobile.
+L1 = 5000;
+h1 = ones(1,L1)/L1;
+L2 = 1500;
+h2 = ones(1,L2)/L2;
+L3 = 2500;
+h3 = ones(1,L3)/L3;
 
 abs1 = abs(s1);
 abs2 = abs(s2);
 abs3 = abs(s3);
 
-env1 = conv(abs1,h);
-env2 = conv(abs2,h);
-env3 = conv(abs3,h);
+env1 = conv(abs1,h1);
+env2 = conv(abs2,h2);
+env3 = conv(abs3,h3);
 
 figure;
 subplot(3, 1, 1)
@@ -194,6 +204,21 @@ xlabel('Echantillon')
 ylabel('Amplitude')
 legend('bleu: enveloppe, Rouge: Lineaire, Jaune: Spline-Cubic');
 hold off
+ 
+E1 = 0;
+E2 = 0;
+E3 = 0;
+for i = 1:length(lin1)
+    if l
+    E1 = E1 + (lin1(i) - env1(i)).^2; 
+    E2 = E2 + (lin2(i) - env2(i)).^2; 
+    E3 = E3 + (lin3(i) - env3(i)).^2; 
+end
+
+rmsL1 = sqrt(1/70000 *E1)
+rmsL2 = sqrt(1/70000 *E2)
+rmsL3 = sqrt(1/70000 *E3)
+
 
 outlin1 = sin1 .* lin1;
 outlin2 = sin2 .* splin2;
@@ -233,17 +258,17 @@ audiowrite('SonCompresser\compress1.wav',sample1,fe);
 audiowrite('SonCompresser\compress2.wav',sample2,fe);
 audiowrite('SonCompresser\compress3.wav',sample3,fe);
 
-soundsc(outlin1,fe);
-pause(2)
-soundsc(s1,fe);
-pause(2)
+% soundsc(outlin1,fe);
+% pause(2)
+% soundsc(s1,fe);
+% pause(2)
 
-soundsc(outlin2,fe);
-pause(2)
-soundsc(s2,fe);
-pause(2)
+% soundsc(outlin2,fe);
+% pause(2)
+% soundsc(s2,fe);
+% pause(2)
 
-soundsc(outlin3,fe);
-pause(2)
-soundsc(s3,fe);
+% soundsc(outlin3,fe);
+% pause(2)
+% soundsc(s3,fe);
 
